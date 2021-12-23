@@ -2,14 +2,15 @@ package com.prio;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.sql.SQLException;
 import javax.swing.*;
 
 public class Project extends JFrame implements ActionListener {
-    static int id;
+    static String id;
 
     JTextField t1;
-    JButton b1;
-    Project(int id) {
+    JButton b1,b2;
+    Project(String id) {
         super("MovieLibrary");
 
         this.id = id;
@@ -35,13 +36,20 @@ public class Project extends JFrame implements ActionListener {
         l1.add(t1);
         b1.addActionListener(this);
 
+        b2=new JButton("MovieList");
+        b2.setBounds(250,150,100,40);
+        b2.setForeground(Color.WHITE);
+        b2.setBackground(Color.blue);
+        l1.add(b2);
+        b2.addActionListener(this);
+
 
     }
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource() == b1) {
             String s=t1.getText();
             try {
-                Api a=new Api(s);
+                Api a=new Api(s,id);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -50,6 +58,15 @@ public class Project extends JFrame implements ActionListener {
             }
 
 
+        }
+        else if(ae.getSource() == b2)
+        {
+            String s="Select title,year from movies where id="+id+";";
+            try {
+                new Movies(s).setVisible(true);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
     }
     public static void main(String[] args) {
